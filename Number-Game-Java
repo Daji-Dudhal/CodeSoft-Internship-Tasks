@@ -1,58 +1,70 @@
 import java.util.Scanner;
-class range{
-    public int genrate(int max, int min){
-        return (int) (Math.random()*(max-min+1)+min);
+
+class RandomGenerator {
+    public int generate(int max, int min) {
+        return (int)(Math.random() * (max - min + 1) + min);
     }
 }
 
-public class Number_Game{
-    public static void main(String[] args){
-        Scanner s=new Scanner(System.in);
-        range rg=new range();
-        int TA=0;
-        int win=0;
+public class numbergame {
+    @SuppressWarnings("ConvertToTryWithResources")
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        RandomGenerator rng = new RandomGenerator();
 
-        while(true){
-            System.out.println("Enter the minimum number:");
-            int min=s.nextInt();
-            System.out.println("Enter the maximum number:");
-            int max=s.nextInt();
-            s.nextLine();
-            int c=rg.genrate(max,min);
-            int A=0;
+        int totalRounds = 0;
+        int roundsWon = 0;
 
-            while(true){
-                System.out.println("Guesss a number between "+min+" and "+max);
-                int g=s.nextInt();
-                A++;
+        while (true) {
+            int min = 1;
+            int max = 100;
+            int secretNumber = rng.generate(max, min);
+            int attemptsLeft = 5;
+            @SuppressWarnings("unused")
+            boolean guessedCorrect = false;
 
-                if(g>c){
-                    System.out.println("Its Greater");
-                }
-                else if(g<c){
-                    System.out.println("Its lower");
-                          
-                }
-                else{
-                    System.out.println("Correct guess");
-                    win++;
+            System.out.println("\n--- Round " + (totalRounds + 1) + " ---");
+            System.out.println("Guess the number between 1 and 100. You have " + attemptsLeft + " attempts.");
+
+            while (attemptsLeft > 0) {
+                System.out.print("Enter your guess: ");
+                int guess = input.nextInt();
+                attemptsLeft--;
+
+                if (guess == secretNumber) {
+                    System.out.println(" Correct! You guessed the number.");
+                    guessedCorrect = true;
+                    roundsWon++;
                     break;
+                } else if (guess > secretNumber) {
+                    System.out.println("Too high!");
+                } else {
+                    System.out.println("Too low!");
+                }
+
+                if (attemptsLeft > 0) {
+                    System.out.println("Attempts left: " + attemptsLeft);
+                } else {
+                    System.out.println(" You're out of attempts! The number was: " + secretNumber);
                 }
             }
-            TA=TA+A;
-            System.out.println("Attempt="+A);
-            System.out.println("Wins="+win);
 
-            double winrate=(double) win/TA*100;
-            System.out.printf("your winrate is %.2f%%\n",winrate);
-            System.out.println("Do you want to play again (y / n)");
-            String PA=s.next();
-            if(!PA.equalsIgnoreCase("y")){
-                s.close();
-                System.exit(0);
+            totalRounds++;
 
+            
+            System.out.println("\n Rounds played: " + totalRounds);
+            System.out.println(" Rounds won: " + roundsWon);
+
+        
+            System.out.print("\nDo you want to play another round? (y/n): ");
+            String playAgain = input.next();
+            if (!playAgain.equalsIgnoreCase("y")) {
+                System.out.println("\nThanks for playing! ");
+                break;
             }
-          s.nextLine();
         }
+
+        input.close();
     }
 }
+
